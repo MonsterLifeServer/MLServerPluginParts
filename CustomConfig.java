@@ -18,14 +18,41 @@ public class CustomConfig {
     private final String file;
     private final Plugin plugin;
 
+    /**
+     * config.ymlを生成する
+     * @param plugin onEnableでthisつかって...
+     */
     public CustomConfig(Plugin plugin) {
         this(plugin, "config.yml");
     }
 
+    /**
+     * 任意の名前.ymlを生成する
+     * @param plugin onEnableでthisつかって...
+     * @param fileName 任意の名前
+     */
     public CustomConfig(Plugin plugin, String fileName) {
         this.plugin = plugin;
         this.file = fileName;
         configFile = new File(plugin.getDataFolder(), file);
+    }
+
+    /**
+     * ワールドフォルダの中に任意の名前.ymlを生成する
+     * @param plugin onEnableでthisつかって...
+     * @param fileName 任意の名前
+     * @param worldName ワールド名
+     */
+    public CustomConfig(Plugin plugin, String fileName, String worldName) {
+        if (Bukkit.getWorld(worldName) == null) {
+            this.plugin = plugin;
+            this.file = fileName;
+            configFile = new File(Bukkit.getServer().getWorlds().get(0).getWorldFolder() + file);
+        } else {
+            this.plugin = plugin;
+            this.file = fileName;
+            configFile = new File(Bukkit.getWorld(worldName).getWorldFolder() + file);
+        }
     }
 
     public void saveDefaultConfig() {
@@ -99,4 +126,5 @@ public class CustomConfig {
             );
         }
     }
+
 }
